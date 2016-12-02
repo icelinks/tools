@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<string.h>
 #define MAX 1000
+#define NONE "\033[m"
+#define RED "\033[0;32;31m"
 
 int KMP(char* s,char* p,int next[]){
    int slen=strlen(s);
@@ -43,10 +45,27 @@ int main(){
   char s[MAX];
   char p[MAX];
   int next[MAX];
-  
+  int nRet = 0;
+  int i;  
+
   scanf("%s",s);
   scanf("%s",p);
   Getnext(p,next);
-  if(KMP(s,p,next)==-1){printf("%s\n","not found");}
-  else{printf("%d\n",KMP(s,p,next));}
+  nRet = KMP(s,p,next);
+  if(nRet==-1){printf("%s\n","not found");}
+  else
+  {
+  	for(i=0;i<strlen(s);i++)
+	{
+    	if(nRet<=i&&i<(nRet+strlen(p)))
+		{
+			printf(RED"%c"NONE,s[i]);
+		}
+		else 
+		{printf("%c",s[i]);}	
+    }
+	printf("\n");
+   }
+   return 0;
 }
+
