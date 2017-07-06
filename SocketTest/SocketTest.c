@@ -127,23 +127,24 @@ void TCPs_r(int *fd,int type)
     while(1)
     {
         system("clear");
+        setbuf(stdin,NULL);
         if(type==1)
         {
             printf("**********************************************\n"
-                   "***********        TCP¿Í»§¶Ë       ***********\n"
+                   "***********        TCPå®¢æˆ·ç«¯       ***********\n"
                    "*                                            *\n"
-                   "*      1.·¢ËÍ      2.µÈ´ı½ÓÊÕ      3.»ØÍË    *\n"
+                   "*      1.å‘é€      2.ç­‰å¾…æ¥æ”¶      3.å›é€€    *\n"
                    "**********************************************\n"
-                   "ÇëÑ¡Ôñ£º");
+                   "è¯·é€‰æ‹©ï¼š");
         }
         else if(type==2)
         {
             printf("**********************************************\n"
-                   "***********        TCP·şÎñ¶Ë       ***********\n"
+                   "***********        TCPæœåŠ¡ç«¯       ***********\n"
                    "*                                            *\n"
-                   "*      1.·¢ËÍ      2.µÈ´ı½ÓÊÕ      3.»ØÍË    *\n"
+                   "*      1.å‘é€      2.ç­‰å¾…æ¥æ”¶      3.å›é€€    *\n"
                    "**********************************************\n"
-                   "ÇëÑ¡Ôñ£º");
+                   "è¯·é€‰æ‹©ï¼š");
         }
         scanf("%d",&s2);
         if(s2==1)
@@ -151,7 +152,7 @@ void TCPs_r(int *fd,int type)
             fp = fopen("mes.txt","r");
             if(fp==NULL)
             {
-                printf("Òª·¢ËÍµÄÏûÏ¢ÎÄ¼şmes.txt²»´æÔÚ£¡\n");
+                printf("è¦å‘é€çš„æ¶ˆæ¯æ–‡ä»¶mes.txtä¸å­˜åœ¨ï¼\n");
                 sleep(1);
                 continue;
             }
@@ -161,7 +162,7 @@ void TCPs_r(int *fd,int type)
             s_buf = (char*)malloc(fsize+1);
             if(s_buf==NULL)
             {
-                printf("¿Õ¼ä·ÖÅäÊ§°Ü£¡\n");
+                printf("ç©ºé—´åˆ†é…å¤±è´¥ï¼\n");
                 fclose(fp);
                 continue;
             }
@@ -172,11 +173,11 @@ void TCPs_r(int *fd,int type)
             nRet = send(*fd,s_buf,fsize+1,0);
             if(nRet<0)
             {
-                printf("·¢ËÍ´íÎó£¡\n");
+                printf("å‘é€é”™è¯¯ï¼\n");
             }
             else
             {
-                printf("·¢ËÍ³É¹¦£¡\n");
+                printf("å‘é€æˆåŠŸï¼\n");
             }
             fclose(fp);
             free(s_buf);
@@ -184,22 +185,25 @@ void TCPs_r(int *fd,int type)
         }
         else if(s2==2)
         {
-            nRet = recv(*fd,r_buf,sizeof(r_buf),0);
-            if(nRet<0)
+            while(1)
             {
-                printf("½ÓÊÕ´íÎó£¡\n");
-            }
-            else
-            {
-                printf("½ÓÊÕÊı¾İ£º%s\n",r_buf);
-                printf("ÊäÈëy¼ÌĞø:");
-                while(1)
+                nRet = recv(*fd,r_buf,sizeof(r_buf),0);
+                if(nRet<0)
                 {
-                    scanf("%s",flag);
-                    if(flag[0]=='y'||flag[0]=='Y')
+                    printf("æ¥æ”¶é”™è¯¯ï¼\n");
+                }
+                else
+                {
+                    printf("æ¥æ”¶æ•°æ®ï¼š%s\n",r_buf);
+                    /*printf("è¾“å…¥yç»§ç»­:");
+                    while(1)
                     {
-                        break;
-                    }
+                        scanf("%s",flag);
+                        if(flag[0]=='y'||flag[0]=='Y')
+                        {
+                            break;
+                        }
+                    }*/
                 }
             }
         }
@@ -209,7 +213,7 @@ void TCPs_r(int *fd,int type)
         }
         else
         {
-            printf("ÊäÈë´íÎó£¬ÖØĞÂÊäÈë£¡\n");
+            printf("è¾“å…¥é”™è¯¯ï¼Œé‡æ–°è¾“å…¥ï¼\n");
         }
         sleep(1);
     }
@@ -231,49 +235,50 @@ int main(int argc,char *argv)
     while(1)
     {
         system("clear");
+        setbuf(stdin,NULL);
         printf("**********************************************\n"
-               "***********  Socket²âÊÔ¹¤¾ßver1.0  ***********\n"
+               "***********  Socketæµ‹è¯•å·¥å…·ver1.0  ***********\n"
                "*                                            *\n"
-               "*1.TCP¿Í»§¶Ë  2.TCP·şÎñ¶Ë  3.ĞŞ¸ÄÉèÖÃ  4.ÍË³ö*\n"
+               "*1.TCPå®¢æˆ·ç«¯  2.TCPæœåŠ¡ç«¯  3.ä¿®æ”¹è®¾ç½®  4.é€€å‡º*\n"
                "**********************************************\n"
-               "ÇëÑ¡Ôñ£º");
+               "è¯·é€‰æ‹©ï¼š");
         scanf("%d",&s1);
         if(s1==1)
         {
-            //Æô¶¯¿Í»§¶Ë
+            //å¯åŠ¨å®¢æˆ·ç«¯
             nRet = TCPclient(&clifd);
             if(nRet!=0)
             {
-                printf("¿Í»§¶ËÁ¬½ÓÊ§°Ü£¬ÖØĞÂÑ¡Ôñ...\n");
+                printf("å®¢æˆ·ç«¯è¿æ¥å¤±è´¥ï¼Œé‡æ–°é€‰æ‹©...\n");
                 sleep(1);
                 continue;
             }
             else
             {
-                printf("¿Í»§¶ËÁ¬½Ó³É¹¦£¬¼ÌĞø²Ù×÷...\n");
+                printf("å®¢æˆ·ç«¯è¿æ¥æˆåŠŸï¼Œç»§ç»­æ“ä½œ...\n");
                 sleep(1);
             }
         }
         else if(s1==2)
         {
-            //Æô¶¯·şÎñ¶Ë
-	        printf("µÈ´ı¿Í»§¶ËÁ¬½Ó...");
+            //å¯åŠ¨æœåŠ¡ç«¯
+	        printf("ç­‰å¾…å®¢æˆ·ç«¯è¿æ¥...");
             nRet = TCPserver(&serfd);
             if(nRet!=0)
             {
-                printf("·şÎñ¶Ë¿ªÆôÊ§°Ü£¬ÖØĞÂÑ¡Ôñ...\n");
+                printf("æœåŠ¡ç«¯å¼€å¯å¤±è´¥ï¼Œé‡æ–°é€‰æ‹©...\n");
                 sleep(1);
                 continue;
             }
             else
             {
-                printf("·şÎñ¶Ë¿ªÆô³É¹¦£¬¼ÌĞø²Ù×÷...\n");
+                printf("æœåŠ¡ç«¯å¼€å¯æˆåŠŸï¼Œç»§ç»­æ“ä½œ...\n");
                 sleep(1);
             }
         }
         else if(s1==3)
         {
-            //ĞŞ¸ÄÅäÖÃ´¦Àí
+            //ä¿®æ”¹é…ç½®å¤„ç†
             printf("IP:\n");
             scanf("%s",TCPServerIP);
             printf("PORT:\n");
@@ -298,7 +303,7 @@ int main(int argc,char *argv)
 	        
 	        fclose(fp);
 	        
-	        printf("ÅäÖÃĞŞ¸Ä³É¹¦!\n");
+	        printf("é…ç½®ä¿®æ”¹æˆåŠŸ!\n");
 	        sleep(1);
             
             continue;
@@ -310,7 +315,7 @@ int main(int argc,char *argv)
         }
         else
         {
-            printf("ÊäÈë´íÎó£¬ÖØĞÂÊäÈë£¡\n");
+            printf("è¾“å…¥é”™è¯¯ï¼Œé‡æ–°è¾“å…¥ï¼\n");
             sleep(1);
             continue;
         }
