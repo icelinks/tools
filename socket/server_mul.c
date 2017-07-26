@@ -41,26 +41,26 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    //ÉùÃ÷epoll_event½á¹¹ÌåµÄ±äÁ¿,evÓÃÓÚ×¢²áÊÂ¼ş,Êı×éÓÃÓÚ»Ø´«Òª´¦ÀíµÄÊÂ¼ş
+    //å£°æ˜epoll_eventç»“æ„ä½“çš„å˜é‡,evç”¨äºæ³¨å†Œäº‹ä»¶,æ•°ç»„ç”¨äºå›ä¼ è¦å¤„ç†çš„äº‹ä»¶
     struct epoll_event ev,events[20];
     
-    //Éú³ÉÓÃÓÚ´¦ÀíacceptµÄepoll×¨ÓÃµÄÎÄ¼şÃèÊö·û
+    //ç”Ÿæˆç”¨äºå¤„ç†acceptçš„epollä¸“ç”¨çš„æ–‡ä»¶æè¿°ç¬¦
     epfd=epoll_create(256);
     struct sockaddr_in clientaddr;
     struct sockaddr_in serveraddr;
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     
-    //ÉèÖÃÌ×½Ó×ÖÑ¡ÏîÎªSO_REUSEADDR£¬¼´socket¿ÉÖØÓÃ (Õâ¸öÌ×½Ó×ÖÑ¡ÏîÍ¨ÖªÄÚºË£¬Èç¹û¶Ë¿ÚÃ¦£¬µ«TCP×´Ì¬Î»ÓÚ TIME_WAIT £¬¿ÉÒÔÖØÓÃ¶Ë¿Ú)
+    //è®¾ç½®å¥—æ¥å­—é€‰é¡¹ä¸ºSO_REUSEADDRï¼Œå³socketå¯é‡ç”¨ (è¿™ä¸ªå¥—æ¥å­—é€‰é¡¹é€šçŸ¥å†…æ ¸ï¼Œå¦‚æœç«¯å£å¿™ï¼Œä½†TCPçŠ¶æ€ä½äº TIME_WAIT ï¼Œå¯ä»¥é‡ç”¨ç«¯å£)
 	int opt=1;
 	setsockopt(listenfd,SOL_SOCKET,SO_REUSEADDR,&opt,sizeof(opt));
 
-    //ÉèÖÃÓëÒª´¦ÀíµÄÊÂ¼şÏà¹ØµÄÎÄ¼şÃèÊö·û
+    //è®¾ç½®ä¸è¦å¤„ç†çš„äº‹ä»¶ç›¸å…³çš„æ–‡ä»¶æè¿°ç¬¦
     ev.data.fd=listenfd;
     
-    //ÉèÖÃÒª´¦ÀíµÄÊÂ¼şÀàĞÍ
+    //è®¾ç½®è¦å¤„ç†çš„äº‹ä»¶ç±»å‹
     ev.events=EPOLLIN|EPOLLET;
 
-    //×¢²áepollÊÂ¼ş
+    //æ³¨å†Œepolläº‹ä»¶
     epoll_ctl(epfd,EPOLL_CTL_ADD,listenfd,&ev);
     bzero(&serveraddr, sizeof(serveraddr));
     
@@ -79,13 +79,13 @@ int main(int argc, char* argv[])
 	clilen = sizeof(clientaddr);
     while(1)
     {
-        //µÈ´ıepollÊÂ¼şµÄ·¢Éú
+        //ç­‰å¾…epolläº‹ä»¶çš„å‘ç”Ÿ
         nfds=epoll_wait(epfd,events,20,500);
         
-        //´¦ÀíËù·¢ÉúµÄËùÓĞÊÂ¼ş
+        //å¤„ç†æ‰€å‘ç”Ÿçš„æ‰€æœ‰äº‹ä»¶
         for(i=0;i<nfds;++i)
         {
-            if(events[i].data.fd==listenfd)//Èç¹ûĞÂ¼à²âµ½Ò»¸öSOCKETÓÃ»§Á¬½Óµ½ÁË°ó¶¨µÄSOCKET¶Ë¿Ú£¬½¨Á¢ĞÂµÄÁ¬½Ó¡£
+            if(events[i].data.fd==listenfd)//å¦‚æœæ–°ç›‘æµ‹åˆ°ä¸€ä¸ªSOCKETç”¨æˆ·è¿æ¥åˆ°äº†ç»‘å®šçš„SOCKETç«¯å£ï¼Œå»ºç«‹æ–°çš„è¿æ¥ã€‚
             {
                 connfd = accept(listenfd,(struct sockaddr *)&clientaddr,&clilen);
                 if(connfd<0){
@@ -95,17 +95,17 @@ int main(int argc, char* argv[])
 
                 char *str = inet_ntoa(clientaddr.sin_addr);
                 printf("accapt a connection from %s\n",str);
-                //ÉèÖÃÓÃÓÚ¶Á²Ù×÷µÄÎÄ¼şÃèÊö·û
+                //è®¾ç½®ç”¨äºè¯»æ“ä½œçš„æ–‡ä»¶æè¿°ç¬¦
                 ev.data.fd=connfd;
                 
-                //ÉèÖÃÓÃÓÚ×¢²âµÄ¶Á²Ù×÷ÊÂ¼ş
+                //è®¾ç½®ç”¨äºæ³¨æµ‹çš„è¯»æ“ä½œäº‹ä»¶
                 ev.events=EPOLLIN|EPOLLET;
                 //ev.events=EPOLLIN;
 
-                //×¢²áev
+                //æ³¨å†Œev
                 epoll_ctl(epfd,EPOLL_CTL_ADD,connfd,&ev);
             }
-            else if(events[i].events&EPOLLIN)//Èç¹ûÊÇÒÑ¾­Á¬½ÓµÄÓÃ»§£¬²¢ÇÒÊÕµ½Êı¾İ£¬ÄÇÃ´½øĞĞ¶ÁÈë¡£
+            else if(events[i].events&EPOLLIN)//å¦‚æœæ˜¯å·²ç»è¿æ¥çš„ç”¨æˆ·ï¼Œå¹¶ä¸”æ”¶åˆ°æ•°æ®ï¼Œé‚£ä¹ˆè¿›è¡Œè¯»å…¥ã€‚
             {
                 printf("EPOLLIN\n");
                 if ( (sockfd = events[i].data.fd) < 0)
@@ -122,24 +122,24 @@ int main(int argc, char* argv[])
                 }
                 line[n] = '\0';
                 printf("read %s\n",line);
-                //ÉèÖÃÓÃÓÚĞ´²Ù×÷µÄÎÄ¼şÃèÊö·û
+                //è®¾ç½®ç”¨äºå†™æ“ä½œçš„æ–‡ä»¶æè¿°ç¬¦
                 ev.data.fd=sockfd;
                 
-                //ÉèÖÃÓÃÓÚ×¢²âµÄĞ´²Ù×÷ÊÂ¼ş
+                //è®¾ç½®ç”¨äºæ³¨æµ‹çš„å†™æ“ä½œäº‹ä»¶
                 ev.events=EPOLLOUT|EPOLLET;
             }
-            else if(events[i].events&EPOLLOUT) // Èç¹ûÓĞÊı¾İ·¢ËÍ
+            else if(events[i].events&EPOLLOUT) // å¦‚æœæœ‰æ•°æ®å‘é€
             {
                 sockfd = events[i].data.fd;
                 write(sockfd, line, n);
                 
-                //ÉèÖÃÓÃÓÚ¶Á²Ù×÷µÄÎÄ¼şÃèÊö·û
+                //è®¾ç½®ç”¨äºè¯»æ“ä½œçš„æ–‡ä»¶æè¿°ç¬¦
                 ev.data.fd=sockfd;
                 
-                //ÉèÖÃÓÃÓÚ×¢²âµÄ¶Á²Ù×÷ÊÂ¼ş
+                //è®¾ç½®ç”¨äºæ³¨æµ‹çš„è¯»æ“ä½œäº‹ä»¶
                 ev.events=EPOLLIN|EPOLLET;
                 
-                //ĞŞ¸ÄsockfdÉÏÒª´¦ÀíµÄÊÂ¼şÎªEPOLIN
+                //ä¿®æ”¹sockfdä¸Šè¦å¤„ç†çš„äº‹ä»¶ä¸ºEPOLIN
                 epoll_ctl(epfd,EPOLL_CTL_MOD,sockfd,&ev);
             }
         }
