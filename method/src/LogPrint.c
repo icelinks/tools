@@ -42,7 +42,7 @@ int LogPrint(int sign,char *file,int line,char *format,...)
 	
 	//set the format
     va_start(va,format);
-    vsprintf(str,format,va);
+    vsnprintf(str,1024,format,va);
     va_end(va);
 
     //choose the log type
