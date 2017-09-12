@@ -1,3 +1,10 @@
+//**************************************************
+//Author          :  fh         
+//Date            :  2017/09/12
+//Version         :
+//Modify Date     :
+//Description     :  简单的测试版内存池
+//**************************************************
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,7 +36,7 @@ void *
 apr_create(int size){
 	int sz = (sizeof(struct apr_slice)+size+ALIGN_SIZE-1)/ALIGN_SIZE;
 	struct apr_slice* q = NULL;
-	q = (struct apr_slice*)malloc(sz*ALIGN_SIZE);
+	q = (struct apr_slice*)calloc(sz*ALIGN_SIZE);
 	if(q==NULL){
 		free(q);
 		return NULL;
@@ -177,10 +184,6 @@ int main()
 		q = apr_get_ptr(q_);
 		if(q!=NULL){
 			sprintf(q,"helloworld");
-			printf("%d\n",q_->sz);
-			if(q_->next==NULL){
-				printf("ok\n");
-			}
 			printf("%s\n",q);
 		}
 		else{
